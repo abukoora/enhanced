@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- ========================================
+         Meta Tags أساسية
+         ======================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="حصون الإيمان - المنهج الصيفي المتكامل لبناء شخصية ابنك المسلمة. 10 دورات، 130 درس، عمل بدون إنترنت">
+    <meta name="keywords" content="إسلام، تعليم، دورات، دينية، قرآن، عقيدة">
+    <meta name="author" content="محمد أبو عبد الرحمن">
+    <meta name="theme-color" content="#D4AF37">
+    <meta name="application-name" content="حصون الإيمان">
+    
+    <!-- ========================================
+         Mobile Web App Meta Tags
+         ======================================== -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="حصون الإيمان">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    
+    <!-- ========================================
+         Security Headers
+         ======================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" 
+          content="
+            default-src 'self';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;
+            style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+            font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+            img-src 'self' data: https: blob:;
+            media-src 'self' https:;
+            connect-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://api.supabase.co;
+            frame-ancestors 'none';
+            base-uri 'self';
+            form-action 'self';
+          ">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    
+    <!-- ========================================
+         Icon و Manifest
+         ======================================== -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="shortcut icon" href="icons/favicon.ico">
+    
+    <!-- ========================================
+         Preload ومصادر مهمة
+         ======================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap">
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- ========================================
+         Stylesheets
+         ======================================== -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <title>حصون الإيمان - المنهج الصيفي المتكامل</title>
+</head>
+<body>
+    <!-- ========================================
+         Splash Screen (شاشة البداية)
+         ======================================== -->
+    <div id="splashScreen">
+        <div class="splash-icon"><i class="fas fa-shield-alt"></i></div>
+        <h1>حصون الإيمان</h1>
+        <p>المنهج الصيفي المتكامل</p>
+        <p style="font-size:0.78rem;color:rgba(212,175,55,0.7);margin-top:6px;">
+            تأليف: محمد أبو عبد الرحمن — عفا الله عنه
+        </p>
+        <div class="splash-loader"></div>
+    </div>
+    
+    <!-- ========================================
+         Top Progress Bar (شريط التقدم العلوي)
+         ======================================== -->
+    <div id="topProgressBar"></div>
+    
+    <!-- ========================================
+         Install Banner (بانر التثبيت)
+         ======================================== -->
+    <div id="installBanner">
+        <div class="install-icon">📲</div>
+        <div class="install-text">
+            <strong>ثبّت التطبيق</strong>
+            <span>يعمل بدون إنترنت على جهازك</span>
+        </div>
+        <div class="install-btns">
+            <button class="btn-install" id="btnInstall">تثبيت</button>
+            <button class="btn-dismiss" id="btnDismiss">✕</button>
+        </div>
+    </div>
+    
+    <!-- ========================================
+         Navigation (الملاحة)
+         ======================================== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>حصون الإيمان</span>
+            </div>
+            <button id="hamburger" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul id="navLinks" class="nav-links">
+                <li><a onclick="navigateTo('home')">الرئيسية</a></li>
+                <li><a onclick="navigateTo('courses')">الدورات</a></li>
+                <li><a onclick="navigateTo('progress')">التقدم</a></li>
+                <li><a onclick="navigateTo('profile')">ملفي</a></li>
+                <li><a onclick="navigateTo('settings')">الإعدادات</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- ========================================
+         Main Container (الحاوية الرئيسية)
+         ======================================== -->
+    <main class="main-container">
+        
+        <!-- Home Page -->
+        <div id="homePage" class="page">
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>مرحباً بك في حصون الإيمان 🛡️</h1>
+                    <p class="subtitle">رحلة 30 يوماً لبناء شخصية مسلمة مؤثرة</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <h3 id="statCourses">10</h3>
+                            <p>دورات</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="statLessons">130</h3>
+                            <p>درس</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="statUsers">10K+</h3>
+                            <p>طالب</p>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="navigateTo('courses')">
+                        <i class="fas fa-book"></i> ابدأ التعلم
+                    </button>
+                </div>
+            </section>
+            
+            <section class="features-section">
+                <h2>المميزات</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-wifi-off"></i>
+                        <h3>عمل بدون إنترنت</h3>
+                        <p>تعلّم حتى بدون اتصال بالإنترنت</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>آمان محسّن</h3>
+                        <p>بياناتك محمية بأعلى معايير الأمان</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>تتبع التقدم</h3>
+                        <p>احصل على إحصائيات مفصلة لتقدمك</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>إنجازات وشارات</h3>
+                        <p>اكسب شارات جميلة مع إنجازاتك</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Courses Page -->
+        <div id="coursesPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h1>الدورات</h1>
+                <p>اختر الدورة التي تريد الابتداء بها</p>
+            </div>
+            <div id="coursesList" class="courses-grid"></div>
+        </div>
+        
+        <!-- Progress Page -->
+        <div id="progressPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h1>التقدم الدراسي</h1>
+                <p>تتبع تقدمك في الدورات</p>
+            </div>
+            <div class="progress-container">
+                <div id="progressStats" class="progress-stats"></div>
+                <div id="progressChart" class="progress-chart"></div>
+            </div>
+        </div>
+        
+        <!-- Profile Page -->
+        <div id="profilePage" class="page" style="display:none;">
+            <div class="page-header">
+                <h1>ملفي</h1>
+            </div>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="profileName">المستخدم</h2>
+                        <p id="profileEmail">البريد الإلكتروني</p>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <h3>الإنجازات</h3>
+                        <p id="achievementCount">0</p>
+                    </div>
+                    <div class="profile-stat">
+                        <h3>الدورات المكملة</h3>
+                        <p id="completedCount">0</p>
+                    </div>
+                    <div class="profile-stat">
+                        <h3>الساعات المستثمرة</h3>
+                        <p id="hoursSpent">0</p>
+                    </div>
+                </div>
+                <div class="achievements-section">
+                    <h3>الإنجازات والشارات</h3>
+                    <div id="achievementsList" class="achievements-grid"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Page -->
+        <div id="settingsPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h1>الإعدادات</h1>
+            </div>
+            <div class="settings-container">
+                <div class="settings-section">
+                    <h3>الإعدادات العامة</h3>
+                    <div class="setting-item">
+                        <label>الوضع الليلي</label>
+                        <input type="checkbox" id="darkModeToggle">
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>الخصوصية والأمان</h3>
+                    <button class="btn-secondary" onclick="BackupSystem.createBackup()">
+                        <i class="fas fa-download"></i> نسخة احتياطية
+                    </button>
+                    <button class="btn-secondary" onclick="SecureStorage.clear()">
+                        <i class="fas fa-trash"></i> مسح البيانات
+                    </button>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>معلومات التطبيق</h3>
+                    <p>النسخة: <strong>1.0.0</strong></p>
+                    <p>آخر تحديث: <strong id="lastUpdate">-</strong></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- ========================================
+         Modal للأخطاء والنجاح
+         ======================================== -->
+    <div id="errorModal" class="modal" style="display:none;">
+        <div class="modal-content error">
+            <i class="fas fa-exclamation-circle"></i>
+            <h2>حدث خطأ</h2>
+            <p id="errorMessage"></p>
+            <button class="btn-primary" onclick="closeModal('errorModal')">حسناً</button>
+        </div>
+    </div>
+    
+    <div id="successModal" class="modal" style="display:none;">
+        <div class="modal-content success">
+            <i class="fas fa-check-circle"></i>
+            <h2>نجح!</h2>
+            <p id="successMessage"></p>
+            <button class="btn-primary" onclick="closeModal('successModal')">حسناً</button>
+        </div>
+    </div>
+    
+    <!-- ========================================
+         Scripts
+         ======================================== -->
+    
+    <!-- Enhanced Systems -->
+    <script src="app-enhanced.js"></script>
+    
+    <!-- Main App -->
+    <script src="app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        // تسجيل Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker
+                    .register('sw-enhanced.js', { scope: '/' })
+                    .then(reg => {
+                        console.log('[App] Service Worker registered:', reg.scope);
+                        
+                        // التحقق من التحديثات
+                        setInterval(() => {
+                            reg.update();
+                        }, 60000); // كل دقيقة
+                    })
+                    .catch(err => {
+                        console.warn('[App] Service Worker registration failed:', err);
+                        ErrorHandler.log(err, { context: 'SW Registration' });
+                    });
+                
+                // الاستماع للتحديثات
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('[App] Service Worker updated');
+                    showSuccessModal('تم تحديث التطبيق');
+                });
+            });
+        } else {
+            console.warn('[App] Service Workers not supported');
+        }
+    </script>
+    
+    <!-- Performance Monitoring -->
+    <script>
+        // قياس أداء التطبيق
+        if ('PerformanceObserver' in window) {
+            const perfObserver = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    console.log('[Perf]', entry.name, entry.duration.toFixed(2) + 'ms');
+                }
+            });
+            
+            perfObserver.observe({
+                entryTypes: ['navigation', 'resource', 'paint']
+            });
+        }
+    </script>
+    
+    <!-- Analytics -->
+    <script>
+        // تتبع تفاعل المستخدم
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                Analytics.track('button_click', {
+                    button: e.target.textContent
+                });
+            }
+        });
+        
+        // تتبع تغيير الصفحات
+        const originalNavigateTo = window.navigateTo;
+        window.navigateTo = function(pageName) {
+            Analytics.track('page_navigation', { page: pageName });
+            return originalNavigateTo.call(this, pageName);
+        };
+    </script>
+    
+    <!-- Error Boundary -->
+    <script>
+        // معالج شامل للأخطاء
+        window.addEventListener('error', (event) => {
+            console.error('[Error Boundary]', event.error);
+            ErrorHandler.log(event.error);
+            showErrorModal('حدث خطأ غير متوقع. يرجى تحديث الصفحة.');
+        });
+        
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('[Unhandled Promise]', event.reason);
+            ErrorHandler.log(event.reason);
+        });
+    </script>
+</body>
+</html>
