@@ -219,53 +219,60 @@ function renderDashboard() {
     return;
   }
 
+  // ✅ تجميع الدروس حسب الفئة (الدورة)
+  const groups = {};
   state.contents.forEach((content) => {
-    const done = state.progressByContentId.has(content.id);
-    const card = el("div", { className: "lesson-card", attrs: { "data-id": content.id, tabindex: "0", role: "button" } }, [
-      done ? el("span", { className: "badge-done", text: "✓ مكتمل" }) : null,
-      el("span", { className: "category", text: content.category || "درس عام" }),
-      el("h3", { text: content.title }),
-      el("p", { className: "excerpt", text: (content.body || "").slice(0, 90) + "…" }),
+    const cat = content.category || "دروس عامة";
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(content);
+  });
+
+  // عرض كل مجموعة كدورة قابلة للطي
+  Object.keys(groups).forEach((category) => {
+    const lessons = groups[category];
+    
+    // إنشاء بطاقة الدورة
+    const courseCard = el("div", { className: "lesson-card", attrs: { style: "padding: var(--space-3); cursor: pointer;" } }, [
+      el("div", { attrs: { style: "display: flex; justify-content: space-between; align-items: center;" } }, [
+        el("h3", { text: category, attrs: { style: "margin: 0; font-size: 1.1rem; color: var(--color-primary);" } }),
+        el("span", { text: `📂 ${lessons.length} دروس`, attrs: { style: "font-size: 0.85rem; color: var(--color-text-muted);" } })
+      ])
     ]);
-    card.addEventListener("click", () => openLesson(content.id));
-    card.addEventListener("keypress", (e) => e.key === "Enter" && openLesson(content.id));
-    list.appendChild(card);
+
+    // إنشاء حاوية الدروس المخفية بداية
+    const lessonsContainer = el("div", { attrs: { style: "display: none; margin-top: var(--space-3);" } });
+    
+    lessons.forEach((content) => {
+      const done = state.progressByContentId.has(content.id);
+      const lessonItem = el("div", { 
+        className: "lesson-card", 
+        attrs: { 
+          style: "padding: var(--space-3); margin-bottom: var(--space-2); cursor: pointer; border-inline-start: 4px solid var(--color-accent);" 
+        } 
+      }, [
+        done ? el("span", { className: "badge-done", text: "✓ مكتمل", attrs: { style: "margin-bottom: 4px;" } }) : null,
+        el("h4", { text: content.title, attrs: { style: "margin: 0; font-size: 1rem;" } }),
+        el("p", { className: "excerpt", text: (content.body || "").slice(0, 60) + "…", attrs: { style: "margin-top: 4px; font-size: 0.85rem;" } })
+      ]);
+      
+      lessonItem.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openLesson(content.id);
+      });
+      lessonsContainer.appendChild(lessonItem);
+    });
+
+    // إضافة حدث الضغط على الدورة لفتح/إغلاق الدروس
+    courseCard.addEventListener("click", () => {
+      const isHidden = lessonsContainer.style.display === "none";
+      lessonsContainer.style.display = isHidden ? "block" : "none";
+      courseCard.style.background = isHidden ? "var(--color-surface-2)" : "var(--color-surface)";
+    });
+
+    list.appendChild(courseCard);
+    list.appendChild(lessonsContainer);
   });
 }
-
-let currentLessonId = null;
-
-function openLesson(id) {
-  const content = state.contents.find((c) => c.id === id);
-  if (!content) return;
-  currentLessonId = id;
-  $("#lesson-category").textContent = content.category || "درس عام";
-  $("#lesson-title").textContent = content.title;
-  $("#lesson-body").textContent = content.body;
-
-  const done = state.progressByContentId.has(id);
-  const btn = $("#btn-mark-complete");
-  btn.textContent = done ? "✓ تم إنهاء هذا الدرس" : "أنهيت هذا الدرس ✓";
-  btn.disabled = done;
-
-  navigate("lesson");
-}
-
-$("#btn-back-to-dashboard").addEventListener("click", () => navigate("dashboard"));
-
-$("#btn-mark-complete").addEventListener("click", async () => {
-  if (!currentLessonId) return;
-  try {
-    await markComplete(currentLessonId);
-    $("#btn-mark-complete").textContent = "✓ تم إنهاء هذا الدرس";
-    $("#btn-mark-complete").disabled = true;
-    $("#btn-mark-complete").classList.add("success-pulse");
-    toast("أحسنت! تم تسجيل إتمام الدرس 🎉");
-  } catch (err) {
-    toast(err.message, "error");
-  }
-});
-
 // ---------------------------------------------------------------
 // المذكرات
 // ---------------------------------------------------------------
